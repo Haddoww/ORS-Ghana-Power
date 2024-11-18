@@ -1,6 +1,6 @@
 % Case File Saved from Hawaii Case Example. To modify/replace Hawaii's data moving forward
 function mpc = GhanaGrid
-mpc.version = '2'; %This is not updated; is Hawaii file's original value
+mpc.version = '1'; %Updated value
 mpc.baseMVA =  100.00; %This is not updated; is Hawaii file's original value
 
 % moving forward... every section is unedited unless otherwise specified by
