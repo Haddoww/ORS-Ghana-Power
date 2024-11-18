@@ -244,7 +244,7 @@ mpc.branch = [
 ];
 
 %% bus names
-% in Hawaii's case example, it had 37 total buses, with a name for every bus listed here:
+% UPDATED to have Ghana's bus names
 mpc.bus_name = { % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS FILE]_[CORRESPONDING # in BUS SECTION]
     'A3BSP_1';
     'Aboadze_2';
