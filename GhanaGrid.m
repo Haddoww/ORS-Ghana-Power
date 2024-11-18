@@ -249,200 +249,87 @@ mpc.bus_name = { % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS
     'A3BSP_1';
     'Aboadze_2';
     'Abobo_3';
-Achimota_4
-Aflao_5
-Akosombo_6
-Akwatia_7
-Akyempim_8
-Asawinso_9
-Asiekpe_10
-Ayanfuri_11
-Bawku_12
-Berekum_13
-Bibiani_14
-Bingerville_15
-Bogoso_16
-Bolgatanga_17
-Bolgatanga2_18
-BRElubo_19
-Bui_20
-Buipe_21
-CapeCoast_22
-Davie_23
-Dunkwa_24
-Dunkwa2_25
-Efasu_26
-Elubo_27
-EnclavedPower_28
-ESAyanfuri_29
-ESKenyase_30
-Essiama_31
-Ho_32
-Industry_33
-JNSunonAsogli_34
-Juabeso_35
-K2BSP_36
-KarPower_37
-Kara_38
-Kenyase_39
-Kintampo_40
-Kodeni_41
-Konongo_42
-Kpandue_43
-Kpevee_44
-Kpong_45
-KpongGS_46
-Kumasi_47
-LomeAflao_48
-Mallam_49
-Mim_50
-Moyassue_51
-Navrongo_52
-NewAbirem_53
-NewObuasi_54
-NewTamale_55
-NewTarkwa_56
-NewTema_57
-Nkawkaw_58
-Obuasi_59
-OuagaSud_60
-PP330_61
-Prestea_62
-Riviera_63
-Savannah_64
-Sawla_65
-Sinkasse_66
-SmelterI_67
-SmelterII_68
-Sogakope_69
-SunonAsogli_70
-Sunyani_71
-Tafo_72
-Takoradi_73
-Tamale_74
-Tarkwa_75
-Techiman_76
-Tumu_77
-Volta_78
-Wa_79
-Winneba_80
-Yendi_81
-Youga_82
-Zagtouli_83
-Zebilla_84
-    
-    'A3BSP_1';
-    'Aboadze_2';
-    'Achimota_3';
-    'Aflao_4';
-    'Akosombo_5';
-    'Akwatia_6';
-    'Akyempim_7';
-    'Asawinso_8';
-    'Asiekpe_9';
-    'Ayanfuri_10';
-    'Bawku_11';
-    'Berekum_12';
-    'Bingerville_13';
-    'Bogoso_14';
-    'Bolgatanga_15';
-    'Bolgatanga2_16';
-    'BR.Elubo_17';
-    'Bui_18';
-    'Buipe_19';
-    'Cape.Coast_20';
-    'Davie_21';
-    'Dunkwa_22';
-    'Dunkwa2_23';
-    'Efasu_24';
-    'Elubo_25';
-    'Enclaved.Power_26';
-'ALOHA138';
-'ALOHA69';
-'FLOWER69';
-'WAVE69';
-'HONOLULU138';
-'HONOLULU69';
-'SURF69';
-'KANEOHE69';
-'TURTLE138';
-'TURTLE69';
-'MAHALO69';
-'LYCHEE69';
-'COCONUT69';
-'KAILUA138';
-'KAILUA69';
-'PALM69';
-'WAIMANALO69';
-'VOLCANO69';
-'PEARL CITY69';
-'MILILANI69';
-'AIEA69';
-'WAIPAHU138';
-'WAIPAHU69';
-'KAPOLEI69';
-'EWA BEACH138';
-'EWA BEACH69';
-'KAHUKU69';
-'HALEIWA69';
-'LAIE69';
-'WAHIAWA69';
-'WAIALUA69';
-'HAUULA69';
-'WAIANAE69';
-'SCHOFIELD69';
-'KALAELOA138';
-'COGEN69';
-'KAHE138';
-};
-
-%% Generator Unit Types
-mpc.gentype = {
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
-'UN';
+    'Achimota_4';
+    'Aflao_5';
+    'Akosombo_6';
+    'Akwatia_7';
+    'Akyempim_8';
+    'Asawinso_9';
+    'Asiekpe_10';
+    'Ayanfuri_11';
+    'Bawku_12';
+    'Berekum_13';
+    'Bibiani_14';
+    'Bingerville_15';
+    'Bogoso_16';
+    'Bolgatanga_17';
+    'Bolgatanga2_18';
+    'BRElubo_19';
+    'Bui_20';
+    'Buipe_21';
+    'CapeCoast_22';
+    'Davie_23';
+    'Dunkwa_24';
+    'Dunkwa2_25';
+    'Efasu_26';
+    'Elubo_27';
+    'EnclavedPower_28';
+    'ESAyanfuri_29';
+    'ESKenyase_30';
+    'Essiama_31';
+    'Ho_32';
+    'Industry_33';
+    'JNSunonAsogli_34';
+    'Juabeso_35';
+    'K2BSP_36';
+    'KarPower_37';
+    'Kara_38';
+    'Kenyase_39';
+    'Kintampo_40';
+    'Kodeni_41';
+    'Konongo_42';
+    'Kpandue_43';
+    'Kpevee_44';
+    'Kpong_45';
+    'KpongGS_46';
+    'Kumasi_47';
+    'LomeAflao_48';
+    'Mallam_49';
+    'Mim_50';
+    'Moyassue_51';
+    'Navrongo_52';
+    'NewAbirem_53';
+    'NewObuasi_54';
+    'NewTamale_55';
+    'NewTarkwa_56';
+    'NewTema_57';
+    'Nkawkaw_58';
+    'Obuasi_59';
+    'OuagaSud_60';
+    'PP330_61';
+    'Prestea_62';
+    'Riviera_63';
+    'Savannah_64';
+    'Sawla_65';
+    'Sinkasse_66';
+    'SmelterI_67';
+    'SmelterII_68';
+    'Sogakope_69';
+    'SunonAsogli_70';
+    'Sunyani_71';
+    'Tafo_72';
+    'Takoradi_73';
+    'Tamale_74';
+    'Tarkwa_75';
+    'Techiman_76';
+    'Tumu_77';
+    'Volta_78';
+    'Wa_79';
+    'Winneba_80';
+    'Yendi_81';
+    'Youga_82';
+    'Zagtouli_83';
+    'Zebilla_84';
 };
 
 %% Generator Fuel Types
