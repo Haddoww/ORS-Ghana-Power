@@ -414,6 +414,7 @@ mpc.bus_name = { 'A3BSP_1'; % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS 
 };
 
 %% Generator Fuel Types
+%% Once Tejaswi takes out 3 of these, it should be able to run.
 mpc.genfuel = {
 'hydro';
 'hydro';
