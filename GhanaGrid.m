@@ -327,8 +327,7 @@ mpc.branch = [
 
 %% bus names
 % UPDATED to have Ghana's bus names
-mpc.bus_name = { % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS FILE]_[CORRESPONDING # in BUS SECTION]
-    'A3BSP_1';
+mpc.bus_name = { 'A3BSP_1'; % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS FILE]_[CORRESPONDING # in BUS SECTION]
     'Aboadze_2';
     'Abobo_3';
     'Achimota_4';
@@ -411,7 +410,7 @@ mpc.bus_name = { % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS
     'Yendi_81';
     'Youga_82';
     'Zagtouli_83';
-    'Zebilla_84';
+    'Zebilla_84'
 };
 
 %% Generator Fuel Types
