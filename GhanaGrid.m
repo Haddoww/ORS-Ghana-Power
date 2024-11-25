@@ -440,8 +440,5 @@ mpc.genfuel = {
 'solar';
 'hydro';
 'solar';
-'biogas';
-'solar';
-'wind';
-'solar'
+'biogas'
 };
