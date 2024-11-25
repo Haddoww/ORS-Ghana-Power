@@ -327,7 +327,8 @@ mpc.branch = [
 
 %% bus names
 % UPDATED to have Ghana's bus names
-mpc.bus_name = { 'A3BSP_1'; % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS FILE]_[CORRESPONDING # in BUS SECTION]
+mpc.bus_name =  {
+    'A3BSP_1'; % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS FILE]_[CORRESPONDING # in BUS SECTION]
     'Aboadze_2';
     'Abobo_3';
     'Achimota_4';
@@ -412,33 +413,32 @@ mpc.bus_name = { 'A3BSP_1'; % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS 
     'Zagtouli_83';
     'Zebilla_84'
 };
-
 %% Generator Fuel Types
 %% Once Tejaswi takes out 3 of these, it should be able to run.
 mpc.genfuel = {
-'hydro';
-'hydro';
-'hydro';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'thermal';
-'solar';
-'solar';
-'solar';
-'solar';
-'solar';
-'hydro';
-'solar';
-'biogas'
-};
+    'hydro';
+    'hydro';
+    'hydro';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'thermal';
+    'solar';
+    'solar';
+    'solar';
+    'solar';
+    'solar';
+    'hydro';
+    'solar';
+    'biogas'
+    };
