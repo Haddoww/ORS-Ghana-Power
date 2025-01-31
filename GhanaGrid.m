@@ -98,7 +98,7 @@ mpc.bus = [
 
 %% generator data 
 %UPDATED to Ghana's Values
-% updated Pmin values using new source
+% updated Pmin values using new source (Economic Case for Bulk Energy Storage in Transmission Systems with High Percentages of Renewable Resources)
 %	bus	Pg	    Qg	    Qmax	Qmin	Vg	   mBase status	Pmax	Pmin
 mpc.gen = [
     6	1020	0	    510	    -510	1	100	    1	    1020.00	204.00  0.00	0.00	0.00	0.00	0.00	0.00	0	0	0	0	0.0000	0	0	0	0;
@@ -442,7 +442,4 @@ mpc.genfuel = {
 'hydro';
 'solar';
 'biogas';
-'solar';
-'wind';
-'solar'
 };
