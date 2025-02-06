@@ -418,6 +418,7 @@ mpc.bus_name = { % bus name format is [NAME][ANY NUMBERS/IDENTIFIERS from ECOWAS
 };
 
 % Finished removing the last 3 values
+% changed to ng
 %% Generator Fuel Types
 mpc.genfuel = {
 'hydro';
