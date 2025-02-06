@@ -417,32 +417,34 @@ mpc.bus_name =  {
     'Zagtouli_83';
     'Zebilla_84'
 };
+
+% Finished removing the last 3 values
+% changed to ng
 %% Generator Fuel Types
-%% Once Tejaswi takes out 3 of these, it should be able to run.
 mpc.genfuel = {
-    'hydro';
-    'hydro';
-    'hydro';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'thermal';
-    'solar';
-    'solar';
-    'solar';
-    'solar';
-    'solar';
-    'hydro';
-    'solar';
-    'biogas'
-    };
+'hydro';
+'hydro';
+'hydro';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'ng';
+'solar';
+'solar';
+'solar';
+'solar';
+'solar';
+'hydro';
+'solar';
+'biogas';
+};
