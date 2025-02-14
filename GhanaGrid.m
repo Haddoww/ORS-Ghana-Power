@@ -164,7 +164,12 @@ mpc.gencost = [
     2	0	0	3	0	0	    0;
     2	0	0	3	0	0    	0;
     2	0	0	3	0	0	    0;
-    2	0	0	3	0	1	    0
+    2	0	0	3	0	0	    0;
+    2	0	0	3	0	0	    0;
+    2	0	0	3	0	0	    0;
+    2	0	0	3	0	0	    0;
+    2	0	0	3	0	0	    0;
+    2	0	0	3	0	0	    0
 ];
 
 %% branch data
@@ -453,6 +458,11 @@ mpc.genfuel = {
 'hydro';
 'solar';
 'biogas';
+'solar';
+'solar';
+'solar';
+'solar';
+'solar'
 };
 
 
