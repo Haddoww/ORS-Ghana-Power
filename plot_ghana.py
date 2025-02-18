@@ -496,6 +496,7 @@ fig = plt.figure(figsize=(6, 9))  # Adjust width and height for 2:1 ratio
 ax = fig.add_subplot(111)
 
 # Loop through each WKT string, parse, plot lines, and mark substations
+substations = []
 for geometry_wkt in geometry_wkts:
     geometry = wkt.loads(geometry_wkt)
     for line in geometry.geoms:  # Loop through LineStrings in the MultiLineString
@@ -503,8 +504,17 @@ for geometry_wkt in geometry_wkts:
         ax.plot(x, y, color="black")  # Use black for all lines
         
         # Add asterisks for substations at the endpoints
+        substations.append((x[0], y[0]))
+        substations.append((x[-1], y[-1]))
         ax.scatter(x[0], y[0], color="blue", s=100, marker="*", label="Substation" if "Substation" not in ax.get_legend_handles_labels()[1] else "")
         ax.scatter(x[-1], y[-1], color="blue", s=100, marker="*")
+
+# Delaunay triangulation
+substations = np.array(substations)
+tri = Delaunay(substations)
+plt.triplot(substations[:,0], substations[:,1], tri.simplices)
+plt.plot(substations[:,0], substations[:,1], 'o')
+plt.show()
 
 # Customize plot
 ax.set_title("Transmission Lines and Substations")
