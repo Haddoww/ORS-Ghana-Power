@@ -48,17 +48,33 @@ monthly_demand_profile = []
 true_mean = mean(average_monthly_demand)
 for i in 1:12
     max_scale = peak_monthly_demand[i] / true_mean
+    display(max_scale)
     new_values = (microgrid_demand.average .* max_scale) ./ maximum(microgrid_demand.average)
-    month_new_values = repeat(new_values', number_of_days_per_month[i])
+    display(new_values)
+    month_new_values = repeat(new_values, number_of_days_per_month[i])
+    display(month_new_values)
     month_new_values_matrix = reshape(month_new_values, 24, number_of_days_per_month[i])
+    display(month_new_values_matrix)
     append!(monthly_demand_profile, month_new_values_matrix)
 end
 
 ## Resahpe the monthly demand profile and create a DataFrame
 demand_profile = DataFrame()
-demand_profile = DataFrame(reshape(monthly_demand_profile, 365, 24), :auto)
+demand_profile = DataFrame(reshape(monthly_demand_profile, 24, 365), :auto)
 # Change column names to 1, 2, 3, ..., 24
-rename!(demand_profile, Symbol.(1:24))
+rename!(demand_profile, Symbol.(1:365))
 
 # Write the demand profile to a CSV file
 CSV.write("demand_profile.csv", demand_profile)
+plot(demand_profile[!, number_of_days_per_month[1]], label="January", xlabel="Hour", ylabel="Scaling Factor", title="Daily Demand Profile for different Months", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[2]], label="February", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[3]], label="March", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[4]], label="April", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[5]], label="May", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[6]], label="June", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[7]], label="July", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[8]], label="August", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[9]], label="September", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[10]], label="October", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[11]], label="November", lw=0.5)
+plot!(demand_profile[!, number_of_days_per_month[12]], label="December", lw=0.5)
