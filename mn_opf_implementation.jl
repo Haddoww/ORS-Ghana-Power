@@ -2,6 +2,7 @@ using PowerModels
 using Ipopt
 using JuMP
 using Gurobi
+include("multiperiod_opf.jl")
 
 # Load the data
 data = PowerModels.parse_file("GhanaGrid.m")
