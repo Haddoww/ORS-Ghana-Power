@@ -4,20 +4,44 @@ using JuMP
 using Gurobi
 using XLSX
 include("multiperiod_opf.jl")
-#using DataFrames and CSV, XLSX packages as well??
 
 # Load the DEMAND data
-staticData = PowerModels.parse_file("src/GhanaGrid.m")
-#println("KEYS HERE: ", keys(staticData))
-#println(staticData)
-#data["gen"][generator]
+staticData = PowerModels.parse_file("src/GhanaGridV2.m")
 
-for g in keys(staticData["gen"]) #MAKE MIN GEN SUPER 
-    staticData["gen"][g]["pmin"] = 0
+##ENABLE THIS for projected solar profile
+# for gen in keys(staticData["gen"])
+#     if staticData["genfuel"][gen]["col_1"] == "solar"
+#         staticData["gen"][gen]["gen_status"] = 1
+#     end
+# end
+
+for branch in keys(staticData["branch"])
+    staticData["branch"][branch]["rate_a"] = staticData["branch"][branch]["rate_a"] * 5
+    staticData["branch"][branch]["b_r"] = 0
 end
 
+for gen in keys(staticData["gen"])
+    staticData["gen"][gen]["pmin"] = 0
+end
+
+old_result = solve_opf(staticData, DCPPowerModel, Ipopt.Optimizer)
+total_load = sum(staticData["load"][l]["pd"] for l in keys(staticData["load"]))
+
+#create a duplicate powermodels case where all solar generators are enabled
+# staticData_projectedSolar = staticData 
+# for gen in keys(staticData_projectedSolar["gen"])
+#     if staticData["genfuel"][gen]["col_1"] == "solar"
+#         staticData_projectedSolar["gen"][gen]["gen_status"] = 1
+#     end
+# end
+
+#USE THIS FOR LOOP IF DEMAND IS TOO LOW
+# for g in keys(staticData["gen"]) #MAKE MIN GEN SUPER 
+#      staticData["gen"][g]["pmin"] = 0
+# end
+
 data = PowerModels.replicate(staticData, 24) # this replicate function creates duplicate data for 24 hours
-#print(keys(data["nw"]))
+#data_projectedSolar = PowerModels.replicate(staticData_projectedSolar, 24) #create a projected solar 24-hr profile as well
 
 # Read the excel file
 xf = XLSX.readxlsx("src/demand_profile.xlsx")
@@ -27,13 +51,10 @@ DEMAND_data = XLSX.getdata(sheet) # a 26x12 Matrix{Any}
 xf = XLSX.readxlsx("src/solar_profile.xlsx")
 sheet = xf["months"]
 SOLAR_data = XLSX.getdata(sheet) # a 26x12 Matrix{Any}
-#display(SOLAR_data[24,12])
-#display(DEMAND_data)
-#jan = DEMAND_data[:, 1]
-#display(jan)
-#display(xf)
 result = solve_mp_opf_ramp(data, DCPPowerModel, Ipopt.Optimizer, multinetwork=true) #solve multiperiod opf
 
+total_load = sum(staticData["load"][l]["pd"] for l in keys(staticData["load"]))
+#old_result = solve_opf(staticData, DCPPowerModel, Ipopt.Optimizer)
 
 global opf_results_costPerDay = [] #cost per one day of each month
 global opf_results_costPerMonth = [] #cost per month 
@@ -72,17 +93,22 @@ for month in 1:12
             #global pd_monthly += float(data["nw"][string(hour)]["load"][load]["pd"]) #sum up pd for every bus at each hour
             #global qd_monthly += float(data["nw"][string(hour)]["load"][load]["qd"]) #sum up qd for every bus at each hour
         end
-        ###println("DONE WITH ROW/HOUR $hour")
 
         scale_generation = SOLAR_data[hour, month]
         for generator in keys(data["nw"][string(hour)]["gen"]) ## you have to change this to just the solar generation indices
             if (staticData["genfuel"][generator]["col_1"] == "solar") && (staticData["gen"][generator]["gen_status"] == 1) #check for active solar only
-                data["nw"][string(hour)]["gen"][generator]["pg"] = staticData["gen"][generator]["pg"] * scale_generation
-                data["nw"][string(hour)]["gen"][generator]["qg"] = staticData["gen"][generator]["qg"] * scale_generation
+                data["nw"][string(hour)]["gen"][generator]["pg"] = staticData["gen"][generator]["pmax"] * scale_generation
+                data["nw"][string(hour)]["gen"][generator]["qg"] = staticData["gen"][generator]["qmax"] * scale_generation
                 #global pg_monthly_solar += float(data["nw"][string(hour)]["gen"][generator]["pg"])
                 #global qg_monthly_solar += float(data["nw"][string(hour)]["gen"][generator]["qg"])
             end
-            #println("GENERATOR TYPEXXX: ",staticData["genfuel"][generator]["col_1"])
+
+            # #duplicate the above if statement actions for the projected solar profile as well
+            # if (staticData_projectedSolar["genfuel"][generator]["col_1"] == "solar") 
+            #     data_projectedSolar["nw"][string(hour)]["gen"][generator]["pg"] = staticData_projectedSolar["gen"][generator]["pmax"] * scale_generation
+            #     data_projectedSolar["nw"][string(hour)]["gen"][generator]["qg"] = staticData_projectedSolar["gen"][generator]["qmax"] * scale_generation
+            # end
+
             if (staticData["genfuel"][generator]["col_1"] == "ng" && !(string(generator) in thermal_gen))
                 push!(thermal_gen, string(generator)) #make list of all thermal generators
             end 
@@ -98,7 +124,6 @@ for month in 1:12
             end
         end
     end
-    
 
     days_inMonth = whatMonth(month) #how many days in each month (28, 30, 31)
     push!(opf_results_costPerDay, (month, float(result["objective"]))) #cost per day (24 hours for 1 day)
@@ -106,65 +131,49 @@ for month in 1:12
     global opf_results_cost_TOTAL += (float(result["objective"]) * float(days_inMonth[3])) #total/yearly cost (365 days)
     push!(opf_results_pgThermal, (month, float(opf_results_pgThermal_MONTHLY), float(opf_results_pgThermal_MONTHLY * float(days_inMonth[3]))))
     global opf_results_pgThermal_TOTAL += float(opf_results_pgThermal_MONTHLY * float(days_inMonth[3]))
-    
-    #global total_pd += (days_inMonth[3]) * pd_monthly
-    #global total_qd += (days_inMonth[3]) * qd_monthly
-    #global total_pg += (days_inMonth[3]) * pg_monthly_solar
-    #global total_qg += (days_inMonth[3]) * qg_monthly_solar
-    
-
-
-    #println("MONTH TOTAL: $pd_monthly")
 end
 
-println("TOTAL COST PER DAY (month, daily cost): ", opf_results_costPerDay)
-println("TOTAL COST PER MONTH (month, monthly cost): ", opf_results_costPerMonth)
+#println("TOTAL COST PER DAY (month, daily cost): ", opf_results_costPerDay)
+#println("TOTAL COST PER MONTH (month, monthly cost): ", opf_results_costPerMonth)
 println("TOTAL YEARLY COST: ", opf_results_cost_TOTAL)
 println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-println("TOTAL THERMAL GENERATION (month, daily, monthly): ", opf_results_pgThermal)
+#println("TOTAL THERMAL GENERATION (month, daily, monthly): ", opf_results_pgThermal)
 println("TOTAL YEARLY THERMAL GENERATION: ", opf_results_pgThermal_TOTAL)
 
-#println("TOTAL pd: ", total_pd)
-#println("TOTAL qd: ", total_qd)
-#println("TOTAL SOLAR pg: ", total_pg)
-#println("TOTAL SOLAR qg: ", total_qg)
 
+# """
+# ## Vary the load demand for each of the 24 hours - Hadley 
+# scale = 1 ## this is the scale factor for the load demand
+# for hour in keys(data["nw"]) #DELETE THIS, IS JUST all network instances (1 to 24)
+#     for key in keys(data["nw"][hour]["load"]) # keys(data["nw"][hour]["load"]): Gets all load elements in each network.
+#         #print(data["nw"][hour]["load"][key]["pd"])
+#         data["nw"][hour]["load"][key]["pd"] = data["nw"][hour]["load"][key]["pd"] * scale ## the scale number depends on the profile choose; currently set to 1
+#         data["nw"][hour]["load"][key]["qd"] = data["nw"][hourn]["load"][key]["qd"] * scale
+#     end
+# end
+# """
 
+# """
+# ## Vary the solar generation for each of the 24 hours - Tejaswi
+# scale = 1 ## this is the scale factor for the solar generation
+# for nw in keys(data["nw"])
+#     for key in keys(data["nw"][nw]["gen"]) ## you have to change this to just the solar generation indices
+#         data["nw"][nw]["gen"][key]["pg"] = data["nw"][nw]["gen"][key]["pg"] * scale ## the scale number depends on the profile choose
+#         data["nw"][nw]["gen"][key]["qg"] = data["nw"][nw]["gen"][key]["qg"] * scale
+#     end
+# end
 
+# ## Solve OPF repeatedly for each of the 24 hours
+# result = solve_mp_opf_ramp(data, ACPPowerModel, Ipopt.Optimizer, multinetwork=true)
 
-"""
-## Vary the load demand for each of the 24 hours - Hadley 
-scale = 1 ## this is the scale factor for the load demand
-for hour in keys(data["nw"]) #DELETE THIS, IS JUST all network instances (1 to 24)
-    for key in keys(data["nw"][hour]["load"]) # keys(data["nw"][hour]["load"]): Gets all load elements in each network.
-        #print(data["nw"][hour]["load"][key]["pd"])
-        data["nw"][hour]["load"][key]["pd"] = data["nw"][hour]["load"][key]["pd"] * scale ## the scale number depends on the profile choose; currently set to 1
-        data["nw"][hour]["load"][key]["qd"] = data["nw"][hourn]["load"][key]["qd"] * scale
-    end
-end
-"""
+# ## Play with the results - Karen
+# ## Investigate changes in output for current VS projeccted solar installations
+# println("Total cost")
+# println("Total loss")
+# println("Total solar generation")
+# println("Total load demand")
 
-"""
-## Vary the solar generation for each of the 24 hours - Tejaswi
-scale = 1 ## this is the scale factor for the solar generation
-for nw in keys(data["nw"])
-    for key in keys(data["nw"][nw]["gen"]) ## you have to change this to just the solar generation indices
-        data["nw"][nw]["gen"][key]["pg"] = data["nw"][nw]["gen"][key]["pg"] * scale ## the scale number depends on the profile choose
-        data["nw"][nw]["gen"][key]["qg"] = data["nw"][nw]["gen"][key]["qg"] * scale
-    end
-end
-
-## Solve OPF repeatedly for each of the 24 hours
-result = solve_mp_opf_ramp(data, ACPPowerModel, Ipopt.Optimizer, multinetwork=true)
-
-## Play with the results - Karen
-## Investigate changes in output for current VS projeccted solar installations
-println("Total cost")
-println("Total loss")
-println("Total solar generation")
-println("Total load demand")
-
-"""
+# """
 
 
 #TASKS
