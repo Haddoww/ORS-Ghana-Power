@@ -2,24 +2,14 @@ using PowerModels
 using Ipopt
 using JuMP
 using PowerPlots
+using Plots
 
 # Load the data
-data = PowerModels.parse_file("data/ghana_test_case.m")
-# data = PowerModels.parse_file("data/hawaii.m")
+data = PowerModels.parse_file("data/GhanaGRID.m")
 powerplot(data, bus_size=50, branch_size =2, gen_size = 50, load_size = 50; width=300, height=500)
 
-
-for key in keys(data["gen"])
-    data["gen"][key]["pmin"] = 0
-end
-
-for key in keys(data["gen"])
-    data["gen"][key]["qmin"] = 10 * data["gen"][key]["qmin"]
-    data["gen"][key]["qmax"] = 10 * data["gen"][key]["qmax"]
-end
-
 # Create the model
-pm = instantiate_model(data, ACPPowerModel, PowerModels.build_opf)
+pm = instantiate_model(data, DCPPowerModel, PowerModels.build_opf)
 result = optimize_model!(pm, optimizer=Ipopt.Optimizer)
 
 # Print the results
@@ -34,8 +24,7 @@ else
     println("Total generation is less than total load")
 end
 
-# Relax the branch flow limits
-for key in keys(data["branch"])
-    data["branch"][key]["rate_a"] = 15 * data["branch"][key]["rate_a"]
-end
-
+# Plot a histogram of the voltage angles and the branch flow percentages
+branch_percentage = [abs((result["solution"]["branch"][key]["pt"]) * 100) / data["branch"][key]["rate_a"] for key in keys(data["branch"])]
+histogram(branch_percentage, bins=50, xlabel="Line loading (%)", ylabel="Number of lines", legend=false)
+indices = findall(x -> x > 80, branch_percentage)
